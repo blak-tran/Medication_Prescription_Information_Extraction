@@ -1,12 +1,12 @@
-#Medication Prescription Information Extraction
+# Medication Prescription Information Extraction
 ##Introduction
 This FastAPI application provides an endpoint (/predict/) for processing and predicting metadata from images, combined with a chatbot.
 
-##Prerequisites
+## Prerequisites
 
 Additionally, ensure that the required modules (app.core.utils and app.modules.Chatbot_core.chatbot_model, and app.modules.OCR.SCANNER_DATA) are available.
 
-##Usage
+## Usage
 Clone this repository:
 
 ```bash
