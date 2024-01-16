@@ -52,8 +52,23 @@ class CHATBOT:
             
         return create_base_model(medication)
     
-    def standardize_data() -> str:
-        pass
+    def standardize_data(self, data) -> str:
+        prompt = self.prompt_template_standardize_data_ + " " + data
+        chat_completion = self.llm_client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        finish_reason = chat_completion.choices[0].finish_reason
+
+        if finish_reason == "stop":
+            data = chat_completion.choices[0].message.content
+        else:
+            print("Error! provide more tokens please")
+            
+        return data
     
     
 llm_model = CHATBOT(OPENAI_KEY, DEFAULT_JSON_PATH, prompt_template_json_tracking_, prompt_template_standardize_data_)
