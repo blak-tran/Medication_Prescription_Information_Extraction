@@ -2,11 +2,10 @@ from app.core.base_model import BaseModel
 from app.core.utils import create_base_model
 from openai import OpenAI
 import os, json
-from dotenv import load_dotenv
+from app.core.utils import load_environments
 
 # Load environment variables from the .env file in the specified root directory
-dotenv_path = os.path.join("./app/environments/.env", ".env")
-load_dotenv(dotenv_path)
+load_environments()
 
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 DEFAULT_JSON_PATH = os.getenv("DEFAULT_JSON_PATH")
