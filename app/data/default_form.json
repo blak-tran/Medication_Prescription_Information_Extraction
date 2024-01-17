@@ -25,7 +25,7 @@
                     "dosage_per_day": "0",
                     "quantity_per_dose": "0",
                     "total_quantity": "0",
-                    "unit": "tablet",
+                    "unit": "tube",
                     "frequency": {
                         "morning": "0",
                         "afternoon": "0",
@@ -38,9 +38,15 @@
         ]
     },
     "metadata": {
+        "user_name": "user123",
+        "age": "",
+        "gender": "",
+        "doctor_name": "doctor1",
+        "hospital_name": "",
+        "address": "",
         "created_at": "2024-01-16T12:00:00Z",
-        "modified_at": "2024-01-16T12:00:00Z",
-        "schema_version": "1.0",
-        "user_name": "user123"
+        "modified_at": "2024-01-16T12:00:00Z",       
+        "pathological": "",
+        "note": ""
     }
 }
