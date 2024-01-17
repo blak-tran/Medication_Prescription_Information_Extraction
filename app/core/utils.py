@@ -41,10 +41,17 @@ def create_base_model(form_json):
     user_data = UserData(medication_records=medication_records)
 
     metadata = Metadata(
-        created_at=form_json["metadata"]["created_at"],
-        modified_at=form_json["metadata"]["modified_at"],
-        schema_version=form_json["metadata"]["schema_version"],
-        user_name=form_json["metadata"]["user_name"],
+        created_at=form_json["metadata"].get("created_at", ""),
+        modified_at=form_json["metadata"].get("modified_at", ""),
+        schema_version=form_json["metadata"].get("schema_version", ""),
+        user_name=form_json["metadata"].get("user_name", ""),
+        age=form_json["metadata"].get("age", ""),
+        gender=form_json["metadata"].get("gender", ""),
+        doctor_name=form_json["metadata"].get("doctor_name", ""),
+        hospital_name=form_json["metadata"].get("hospital_name", ""),
+        address=form_json["metadata"].get("address", ""),
+        pathological=form_json["metadata"].get("pathological", ""),
+        note=form_json["metadata"].get("note", ""),
     )
 
     return BaseModel(user_data=user_data, metadata=metadata)
