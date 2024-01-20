@@ -38,5 +38,7 @@ COPY . /app/
 
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 
-RUN cd /app/
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","8001"]
+RUN ls 
+RUN chmod +x /app/run_service.sh
+CMD ["/app/run_service.sh"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","80"]
