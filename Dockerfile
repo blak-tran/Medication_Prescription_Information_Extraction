@@ -13,7 +13,7 @@ RUN apt-get update \
     && apt-get -y install gcc \
     && apt-get clean
 
-RUN apt-get update && apt-get install -y python3 python3-dev git wget
+RUN apt-get update && apt-get install -y python3 python3-dev git curl
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python3 get-pip.py
 
@@ -28,7 +28,7 @@ RUN update-alternatives  --set python /usr/bin/python3
 RUN pip install --upgrade pip
 RUN pip install cmake
 
-RUN pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
 
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt \
@@ -38,5 +38,7 @@ COPY . /app/
 
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 
-RUN ls
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","80"]
+RUN ls 
+RUN chmod +x /app/run_service.sh
+CMD ["/app/run_service.sh"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","80"]
