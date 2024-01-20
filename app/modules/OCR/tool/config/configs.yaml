@@ -1,0 +1,23 @@
+#################   DETECTION CONFIG   ###################
+
+det_weight: "app/weights/PANNet_best_map.pth"
+det_config: "app/modules/OCR/tool/config/detection/configs.yaml"
+
+#################   OCR CONFIG   ###################
+
+ocr_weight: "app/weights/transformerocr.pth"
+ocr_config: "app/modules/OCR/tool/config/ocr/configs.yaml"
+
+#################   RETRIEVAL CONFIG   ###################
+
+retr_mode: "all"
+correction_mode: "ed"
+bert_weight: "app/weights/phobert_report.pth"
+dictionary_csv: "app/modules/OCR/modules/retrieval/heuristic/custom-dictionary.csv"
+retr_classes: [
+  "SELLER",
+  "ADDRESS",
+  "TIMESTAMP",
+  "TOTAL_COST",
+  "NONE"
+]
