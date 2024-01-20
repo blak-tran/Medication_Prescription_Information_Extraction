@@ -30,6 +30,7 @@ class CHATBOT:
         
     def Json_tracking(self, data: str) -> BaseModel:
         prompt = self.prompt_template_json_tracking_ + " " + data
+        print("Reqest Chatbot for parse json: ", prompt)
         chat_completion = self.llm_client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             response_format={"type":"json_object"},
@@ -43,10 +44,8 @@ class CHATBOT:
 
         if finish_reason == "stop":
             data = chat_completion.choices[0].message.content
-
             medication = json.loads(data)
-            for ele in medication:
-                print(ele)
+            print(medication)
         else :
             print("Error! provide more tokens please")
             
@@ -54,6 +53,7 @@ class CHATBOT:
     
     def standardize_data(self, data) -> str:
         prompt = self.prompt_template_standardize_data_ + " " + data
+        print("Reqest Chatbot for generalize data: ", prompt)
         chat_completion = self.llm_client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             messages=[
