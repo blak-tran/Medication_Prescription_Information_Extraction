@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 Docker build:
 ```bash
-docker build . -t Pillsy_AI_Deployment:2.0 -f Dockerfile
+docker build . -t pillsy_ai_deployment:2.0 -f Dockerfile
 ```
 Docker Run:
 ```bash
