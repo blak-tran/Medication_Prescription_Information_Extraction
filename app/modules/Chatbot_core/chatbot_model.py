@@ -28,7 +28,7 @@ class CHATBOT:
         
         
         
-    def Json_tracking(self, data: str) -> user_data_basemodel:
+    def Json_tracking(self, user_id: str, data: str) -> user_data_basemodel:
         prompt = self.prompt_template_json_tracking_ + " " + data
         print("Reqest Chatbot for parse json: ", prompt)
         chat_completion = self.llm_client.chat.completions.create(
@@ -49,7 +49,7 @@ class CHATBOT:
         else :
             print("Error! provide more tokens please")
             
-        return create_base_model(form_json=medication)
+        return create_base_model(user_id=user_id, form_json=medication)
     
     def standardize_data(self, data) -> str:
         prompt = self.prompt_template_standardize_data_ + " " + data

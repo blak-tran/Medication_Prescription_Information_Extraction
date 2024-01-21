@@ -23,3 +23,4 @@ torchvision
 scikit-learn
 python-multipart
 pillow==9.5.0
+pyjwt
