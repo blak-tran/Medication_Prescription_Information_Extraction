@@ -2,6 +2,6 @@
 
 set -m
 
-exec uvicorn /app/main:app --host 0.0.0.0 --port 80
+exec uvicorn main:app --host 0.0.0.0 --port 8000
 
 fg %1
