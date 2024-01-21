@@ -1,4 +1,4 @@
-from app.core.base_model import BaseModel
+from app.core.base_model import user_data_basemodel
 from app.core.utils import create_base_model
 from openai import OpenAI
 import os, json
@@ -28,14 +28,14 @@ class CHATBOT:
         
         
         
-    def Json_tracking(self, data: str) -> BaseModel:
+    def Json_tracking(self, data: str) -> user_data_basemodel:
         prompt = self.prompt_template_json_tracking_ + " " + data
         print("Reqest Chatbot for parse json: ", prompt)
         chat_completion = self.llm_client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
             response_format={"type":"json_object"},
             messages=[
-                {"role":"system","content":"Cung cấp đầu ra ở dạng JSON hợp lệ. Lược đồ dữ liệu phải như thế này:"+json.dumps(self.default_json_format)},
+                {"role":"system","content":"Cung cấp đầu ra ở dạng JSON hợp lệ với mỗi medication là một loại thuốc với những thông tin như được cung cấp trên. Lược đồ dữ liệu phải như thế này:"+json.dumps(self.default_json_format)},
                 {"role":"user","content":prompt}
             ]
         )
@@ -49,7 +49,7 @@ class CHATBOT:
         else :
             print("Error! provide more tokens please")
             
-        return create_base_model(medication)
+        return {"user_data": create_base_model(form_json=medication)}
     
     def standardize_data(self, data) -> str:
         prompt = self.prompt_template_standardize_data_ + " " + data
