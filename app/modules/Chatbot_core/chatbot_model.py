@@ -49,7 +49,7 @@ class CHATBOT:
         else :
             print("Error! provide more tokens please")
             
-        return {"user_data": create_base_model(form_json=medication)}
+        return create_base_model(form_json=medication)
     
     def standardize_data(self, data) -> str:
         prompt = self.prompt_template_standardize_data_ + " " + data
