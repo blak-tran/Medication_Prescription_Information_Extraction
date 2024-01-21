@@ -118,7 +118,6 @@ class Pipeline:
         else:
             preds, probs = None, None
 
-        import pdb; pdb.set_trace()
         visualize(
           img1, boxes, texts, 
           img_name = self.final_output, 

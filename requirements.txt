@@ -1,6 +1,7 @@
 openai
 fastapi
 python-dotenv
+opencv-python
 uvicorn
 pyyaml>=5.1
 tensorboard
@@ -22,3 +23,4 @@ torchvision
 scikit-learn
 python-multipart
 pillow==9.5.0
+pyjwt
