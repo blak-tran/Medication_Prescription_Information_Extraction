@@ -51,7 +51,6 @@ def create_base_model(user_id="", form_json=None):
             end_date=datetime.fromisoformat(medication["end_date"]) if medication["end_date"] else "",
             )
         medication_records.append(medication)
-    import pdb; pdb.set_trace()
     medication_records = medication_records_basemodel(medication_records)
 
     meta_data = meta_data_basemodel(
