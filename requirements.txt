@@ -1,6 +1,7 @@
 openai
 fastapi
 python-dotenv
+opencv-python
 uvicorn
 pyyaml>=5.1
 tensorboard

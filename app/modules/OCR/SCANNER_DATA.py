@@ -20,7 +20,7 @@ TEMP_ROOT_PATH = os.getenv("temp_path")
 
 class APP_SCANNER:
     def __init__(self, config) -> None:
-        self.do_retrieve = True
+        self.do_retrieve = False
         self.find_best_rotation = True
         self.debug = True
         self.load_config(config)
