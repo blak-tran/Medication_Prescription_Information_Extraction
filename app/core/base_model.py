@@ -36,5 +36,6 @@ class meta_data_basemodel:
 
 @dataclass
 class user_data_basemodel:
+    medication_records_id: str
     medication_records: medication_records_basemodel
     meta_data: meta_data_basemodel

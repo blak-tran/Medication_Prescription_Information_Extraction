@@ -33,42 +33,41 @@ def get_datetime_with_timezone():
 
 
 # Function to create an instance of BaseModel from form_json
-def create_base_model(user_id="", form_json=None):
+def create_base_model(user_id="", prescription_Id="", form_json=None):
     medication_records = []
     for record_data in form_json["user_data"]["medication_records"]:
-        medication = record_data["medication"]
-        medication = medication_basemodel( 
-            record_id= str(uuid.uuid4()),
-            name=medication["name"],
-            dosage_per_day=int(medication["dosage_per_day"]),
-            quantity_per_dose=int(medication["quantity_per_dose"]),
-            total_quantity=int(medication["total_quantity"]),
-            unit=medication["unit"],
-            frequency_morning=int(medication["frequency"]["morning"]),
-            frequency_afternoon=int(medication["frequency"]["afternoon"]),
-            frequency_evening=int(medication["frequency"]["evening"]),
-            start_date=datetime.fromisoformat(medication["start_date"]) if medication["start_date"] else "",
-            end_date=datetime.fromisoformat(medication["end_date"]) if medication["end_date"] else "",
-            )
+        medication = medication_basemodel(
+            record_id=str(uuid.uuid4()),
+            name=record_data["name"],
+            dosage_per_day=record_data["dosage_per_day"],
+            quantity_per_dose=record_data["quantity_per_dose"],
+            total_quantity=record_data["total_quantity"],
+            unit=record_data["unit"],
+            frequency_morning=record_data["frequency_morning"],
+            frequency_afternoon=record_data["frequency_afternoon"],
+            frequency_evening=record_data["frequency_evening"],
+            start_date=datetime.fromisoformat(record_data["start_date"]),
+            end_date=datetime.fromisoformat(record_data["end_date"]),
+        )
         medication_records.append(medication)
     medication_records = medication_records_basemodel(medication_records)
 
     meta_data = meta_data_basemodel(
-        created_at=get_datetime_with_timezone(),
-        modified_at=get_datetime_with_timezone(),
-        schema_version=form_json["user_data"]["meta_data"].get("schema_version"),
-        user_name=form_json["user_data"]["meta_data"].get("user_name"),
+        created_at=form_json["meta_data"]["created_at"],
+        modified_at=form_json["meta_data"]["modified_at"],
+        schema_version=form_json["meta_data"]["schema_version"],
+        user_name=form_json["meta_data"]["user_name"],
         user_id=user_id,
-        age=form_json["user_data"]["meta_data"].get("age"),
-        gender=form_json["user_data"]["meta_data"].get("gender"),
-        doctor_name=form_json["user_data"]["meta_data"].get("doctor_name"),
-        hospital_name=form_json["user_data"]["meta_data"].get("hospital_name"),
-        address=form_json["user_data"]["meta_data"].get("address"),
-        pathological=form_json["user_data"]["meta_data"].get("pathological"),
-        note=form_json["user_data"]["meta_data"].get("note"),
+        age=form_json["meta_data"]["age"],
+        gender=form_json["meta_data"]["gender"],
+        doctor_name=form_json["meta_data"]["doctor_name"],
+        hospital_name=form_json["meta_data"]["hospital_name"],
+        address=form_json["meta_data"]["address"],
+        pathological=form_json["meta_data"]["pathological"],
+        note=form_json["meta_data"]["note"],
     )
 
-    return user_data_basemodel(medication_records=medication_records, meta_data=meta_data)
+    return user_data_basemodel(medication_records_id=prescription_Id, medication_records=medication_records, meta_data=meta_data)
 
 
 def save_Image_from_bytes(image: bytes):
