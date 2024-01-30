@@ -69,12 +69,19 @@ def create_base_model(user_id="", prescription_Id="", form_json=None):
 
     return user_data_basemodel(medication_records_id=prescription_Id, medication_records=medication_records, meta_data=meta_data)
 
+import base64
+def save_Image_from_bytes(encoded_image):
+    # Decode the base64-encoded image
+    decoded_image = base64.b64decode(encoded_image)
 
-def save_Image_from_bytes(image: bytes):
-    # Process the uploaded image
-    image = Image.open(io.BytesIO(image))
-    # Save the Image locally
+    # Process the decoded image
+    image = Image.open(io.BytesIO(decoded_image))
+
+    # Save the image locally
     image.save(temp_img_path)
+
+    # Read the saved image using OpenCV
     img_read = cv2.imread(temp_img_path)
+
     return img_read
 

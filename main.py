@@ -10,7 +10,7 @@ app = FastAPI()
 @app.post("/api/v1/predict-ocr/")
 async def predict_ocr(user_Id: str = None, 
                       prescription_Id: str = None, 
-                      image: bytes = File(...)):
+                      image: bytes= None ):
     error = ""
     STATUS = 200 
     try:
