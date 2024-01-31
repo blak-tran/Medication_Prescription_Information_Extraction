@@ -8,10 +8,10 @@ app = FastAPI()
 
 
 @app.post("/api/v1/predict-ocr/")
-async def predict_ocr(data: dict):
-    user_Id = data.get("User_Id")
-    prescription_Id = data.get("Prescription_Id")
-    image = data.get("Image")
+async def predict_ocr(message: dict):
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    image = message.get("Image")
     
     error = ""
     STATUS = 200 
@@ -31,7 +31,7 @@ async def predict_ocr(data: dict):
     response = {"status": STATUS, 
                 "user_Id": user_Id, 
                 "prescription_Id": prescription_Id,
-                "data": str(data), 
+                "data": data, 
                 "imageBase64": img_bytes, 
                 "error": error}
     print(response)
@@ -40,21 +40,20 @@ async def predict_ocr(data: dict):
 
 
 @app.post("/api/v1/predict-info/")
-async def predict_info(data: dict):
-    user_Id = data.get("User_Id")
-    prescription_Id = data.get("Prescription_Id")
-    data = data.get("data")
+async def predict_info(message: dict):
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    data = message.get("Data")
     error = ""
     STATUS = 200
-
     try:
-        data_ehance = llm_model.standardize_data(data)
-        data = llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
+        data_ehance = llm_model.standardize_data(str(data))
+        json_data = llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
     except Exception as e:
         error = "Traceback: " + str(e)
         STATUS = 404
         print(f"An error occurred: {e}")
 
-    response = {"status": STATUS, "user_data": data, "error": error}
+    response = {"status": STATUS, "user_data": json_data, "error": error}
     print(response)
     return response
