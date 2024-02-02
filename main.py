@@ -2,15 +2,17 @@ from fastapi import FastAPI, File
 from app.core.utils import save_Image_from_bytes
 from app.modules.Chatbot_core.chatbot_model import llm_model
 from app.modules.OCR.SCANNER_DATA import app_scanner
-import jwt, base64
+import base64
 
 app = FastAPI()
 
 
 @app.post("/api/v1/predict-ocr/")
-async def predict_ocr(user_Id: str = None, 
-                      prescription_Id: str = None, 
-                      image: bytes = File(...)):
+async def predict_ocr(message: dict):
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    image = message.get("Image")
+    
     error = ""
     STATUS = 200 
     try:
@@ -32,24 +34,26 @@ async def predict_ocr(user_Id: str = None,
                 "data": data, 
                 "imageBase64": img_bytes, 
                 "error": error}
+    print(response)
     
     return response
 
 
 @app.post("/api/v1/predict-info/")
-async def predict_info(user_Id: str = None, 
-                      prescription_Id: str = None,
-                      data: str = None):
+async def predict_info(message: dict):
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    data = message.get("Data")
     error = ""
     STATUS = 200
-
     try:
-        data_ehance = llm_model.standardize_data(data)
-        data = llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
+        data_ehance = llm_model.standardize_data(str(data))
+        json_data = llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
     except Exception as e:
         error = "Traceback: " + str(e)
         STATUS = 404
         print(f"An error occurred: {e}")
 
-    response = {"status": STATUS, "user_data": data, "error": error}
+    response = {"status": STATUS, "user_data": json_data, "error": error}
+    print(response)
     return response
