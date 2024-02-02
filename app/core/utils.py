@@ -35,46 +35,48 @@ def get_datetime_with_timezone():
 # Function to create an instance of BaseModel from form_json
 def create_base_model(user_id="", prescription_Id="", form_json=None):
     medication_records = []
-    for record_data in form_json["user_data"]["medication_records"]:
-        if record_data["start_date"] is not None:
-            start_date=datetime.fromisoformat(record_data["start_date"])
-        else: 
-            start_date = record_data["start_date"]
-            
-        if record_data["end_date"] is not None:
-            end_date = datetime.fromisoformat(record_data["end_date"])
-        else:
-            end_date = record_data["end_date"]
-            
-        medication = medication_basemodel(
-            record_id=str(uuid.uuid4()),
-            name=record_data["name"],
-            dosage_per_day=record_data["dosage_per_day"],
-            quantity_per_dose=record_data["quantity_per_dose"],
-            total_quantity=record_data["total_quantity"],
-            unit=record_data["unit"],
-            frequency_morning=record_data["frequency_morning"],
-            frequency_afternoon=record_data["frequency_afternoon"],
-            frequency_evening=record_data["frequency_evening"],
-            start_date=start_date,
-            end_date=end_date,
-        )
-        medication_records.append(medication)
+
+    if "user_data" in form_json and "medication_records" in form_json["user_data"]:
+        for record_data in form_json["user_data"]["medication_records"]:
+            start_date = None
+            end_date = None
+
+            if "start_date" in record_data and record_data["start_date"] is not None:
+                start_date = datetime.fromisoformat(record_data["start_date"])
+
+            if "end_date" in record_data and record_data["end_date"] is not None:
+                end_date = datetime.fromisoformat(record_data["end_date"])
+
+            medication = medication_basemodel(
+                record_id=str(uuid.uuid4()),
+                name=record_data.get("name", ""),
+                dosage_per_day=record_data.get("dosage_per_day", ""),
+                quantity_per_dose=record_data.get("quantity_per_dose", ""),
+                total_quantity=record_data.get("total_quantity", ""),
+                unit=record_data.get("unit", ""),
+                frequency_morning=record_data.get("frequency_morning", ""),
+                frequency_afternoon=record_data.get("frequency_afternoon", ""),
+                frequency_evening=record_data.get("frequency_evening", ""),
+                start_date=start_date,
+                end_date=end_date,
+            )
+            medication_records.append(medication)
+
     medication_records = medication_records_basemodel(medication_records)
 
     meta_data = meta_data_basemodel(
-        created_at=form_json["meta_data"]["created_at"],
-        modified_at=form_json["meta_data"]["modified_at"],
-        schema_version=form_json["meta_data"]["schema_version"],
-        user_name=form_json["meta_data"]["user_name"],
+        created_at=form_json.get("meta_data", {}).get("created_at", ""),
+        modified_at=form_json.get("meta_data", {}).get("modified_at", ""),
+        schema_version=form_json.get("meta_data", {}).get("schema_version", ""),
+        user_name=form_json.get("meta_data", {}).get("user_name", ""),
         user_id=user_id,
-        age=form_json["meta_data"]["age"],
-        gender=form_json["meta_data"]["gender"],
-        doctor_name=form_json["meta_data"]["doctor_name"],
-        hospital_name=form_json["meta_data"]["hospital_name"],
-        address=form_json["meta_data"]["address"],
-        pathological=form_json["meta_data"]["pathological"],
-        note=form_json["meta_data"]["note"],
+        age=form_json.get("meta_data", {}).get("age", ""),
+        gender=form_json.get("meta_data", {}).get("gender", ""),
+        doctor_name=form_json.get("meta_data", {}).get("doctor_name", ""),
+        hospital_name=form_json.get("meta_data", {}).get("hospital_name", ""),
+        address=form_json.get("meta_data", {}).get("address", ""),
+        pathological=form_json.get("meta_data", {}).get("pathological", ""),
+        note=form_json.get("meta_data", {}).get("note", ""),
     )
 
     return user_data_basemodel(medication_records_id=prescription_Id, medication_records=medication_records, meta_data=meta_data)

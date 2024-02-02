@@ -4,17 +4,17 @@ from datetime import datetime
 
 @dataclass
 class medication_basemodel:
-    record_id: str 
-    name: str
-    dosage_per_day: int
-    quantity_per_dose: int
-    total_quantity: int
-    unit: str
-    frequency_morning: int
-    frequency_afternoon: int
-    frequency_evening: int
-    start_date: datetime
-    end_date: datetime
+    record_id: str = None
+    name: str = None
+    dosage_per_day: int = None
+    quantity_per_dose: int = None
+    total_quantity: int = None 
+    unit: str = None
+    frequency_morning: int = None 
+    frequency_afternoon: int = None
+    frequency_evening: int = None
+    start_date: datetime = None
+    end_date: datetime = None
 
 @dataclass
 class medication_records_basemodel:
