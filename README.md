@@ -25,7 +25,7 @@ docker build . -t pillsy_ai_deployment:2.0 -f Dockerfile
 ```
 Docker Run:
 ```bash
-sudo docker run --runtime nvidia -d --restart=unless-stopped pillsy_ai_deployment:2.0
+sudo docker run -p 8000:8000 --runtime nvidia -d --restart=unless-stopped pillsy_ai_deployment:2.0
 ```
 
 Run the FastAPI application:

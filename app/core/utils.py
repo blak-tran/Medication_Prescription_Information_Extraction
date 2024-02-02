@@ -36,6 +36,16 @@ def get_datetime_with_timezone():
 def create_base_model(user_id="", prescription_Id="", form_json=None):
     medication_records = []
     for record_data in form_json["user_data"]["medication_records"]:
+        if record_data["start_date"] is not None:
+            start_date=datetime.fromisoformat(record_data["start_date"])
+        else: 
+            start_date = record_data["start_date"]
+            
+        if record_data["end_date"] is not None:
+            end_date = datetime.fromisoformat(record_data["end_date"])
+        else:
+            end_date = record_data["end_date"]
+            
         medication = medication_basemodel(
             record_id=str(uuid.uuid4()),
             name=record_data["name"],
@@ -46,8 +56,8 @@ def create_base_model(user_id="", prescription_Id="", form_json=None):
             frequency_morning=record_data["frequency_morning"],
             frequency_afternoon=record_data["frequency_afternoon"],
             frequency_evening=record_data["frequency_evening"],
-            start_date=datetime.fromisoformat(record_data["start_date"]),
-            end_date=datetime.fromisoformat(record_data["end_date"]),
+            start_date=start_date,
+            end_date=end_date,
         )
         medication_records.append(medication)
     medication_records = medication_records_basemodel(medication_records)
