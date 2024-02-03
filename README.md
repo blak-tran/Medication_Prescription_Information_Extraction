@@ -15,6 +15,9 @@ git clone git@github.com:blak-tran/exe202_project_Medication_Prescription_Inform
 cd exe202_project_Medication_Prescription_Information_Extraction
 ```
 
+## Pretrained model
+https://drive.google.com/drive/folders/1CPn2kOxE1rXo7ZB13E23RdmhbI1zplpy?usp=sharing
+
 Install dependencies:
 ```bash
 pip install -r requirements.txt
