@@ -65,8 +65,8 @@ def create_base_model(user_id="", prescription_Id="", form_json=None):
     medication_records = medication_records_basemodel(medication_records)
 
     meta_data = meta_data_basemodel(
-        created_at=form_json.get("meta_data", {}).get("created_at", ""),
-        modified_at=form_json.get("meta_data", {}).get("modified_at", ""),
+        created_at=get_datetime_with_timezone(),
+        modified_at=get_datetime_with_timezone(),
         schema_version=form_json.get("meta_data", {}).get("schema_version", ""),
         user_name=form_json.get("meta_data", {}).get("user_name", ""),
         user_id=user_id,

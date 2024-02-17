@@ -1,46 +1,31 @@
 { "user_data": {
-    "medication_records_id": "8ba9b177-02b3-4d38-af37-7d81b83c8d4c",
+    "medication_records_id": "",
     "medication_records": [
         {
-            "record_id": "1b838468-400e-4d6e-a1c3-2045fa0d3eb9",
-            "name": "Penicilin (Phenoxymethylpenicilin Kali)",
-            "dosage_per_day": 6,
-            "quantity_per_dose": 2,
-            "total_quantity": 60,
-            "unit": "viên",
-            "frequency_morning": 2,
-            "frequency_afternoon": 2,
-            "frequency_evening": 2,
-            "start_date": "2020-02-18T00:00:00",
-            "end_date": "2020-03-04T00:00:00"
-        },
-        {
-            "record_id": "c1f7f9ce-97c6-40db-9640-1c66e706f726",
-            "name": "Paracetamol (acetaminophen) 500mg (Mypara 500)",
-            "dosage_per_day": 2,
+            "record_id": "",
+            "name": "",
+            "dosage_per_day": 1,
             "quantity_per_dose": 1,
-            "total_quantity": 20,
-            "unit": "viên",
+            "total_quantity": 1,
+            "unit": "",
             "frequency_morning": 1,
-            "frequency_afternoon": 0,
+            "frequency_afternoon": 1,
             "frequency_evening": 1,
-            "start_date": "2020-02-18T00:00:00",
-            "end_date": "2020-03-04T00:00:00"
+            "start_date": "isoformat string:",
+            "end_date": "isoformat string:"
         }
     ]
 },
 "meta_data": {
-    "created_at": "2024-01-21T11:32:50.521647+00:00",
-    "modified_at": "2024-01-21T11:32:52.062522+00:00",
     "schema_version": null,
-    "user_name": "[Tên bệnh nhân]",
-    "user_id": "4ba51276-7081-444d-a5e1-d5776b4caaef",
-    "age": 24,
-    "gender": "Nam",
-    "doctor_name": "Bs. Lê Thị Hoá",
-    "hospital_name": "SỐ Y TẾ THÀNH PHỐ ĐÀ NẴNG",
-    "address": "Phường An Hải Đông, Quận Sơn Trà, Thành phố Đà Nẵng",
-    "pathological": "Thấp không ảnh hưởng đến tim, không kèm theo bệnh nào khác",
-    "note": "Bệnh nhân đi khám lần thứ: 7; Lời dặn của bác sĩ: Hết thuốc tái khám, mua vỏ 200 trang"
+    "user_name": "",
+    "user_id": "",
+    "age": 1,
+    "gender": "",
+    "doctor_name": "",
+    "hospital_name": "",
+    "address": "",
+    "pathological": "",
+    "note": ""
     }
 }

@@ -35,7 +35,7 @@ class CHATBOT:
             model="gpt-3.5-turbo-1106",
             response_format={"type":"json_object"},
             messages=[
-                {"role":"system","content":"Cung cấp đầu ra ở dạng JSON hợp lệ với mỗi medication là một loại thuốc với những thông tin như được cung cấp trên. Lược đồ dữ liệu phải như thế này:"+json.dumps(self.default_json_format)},
+                {"role":"system","content":"Cung cấp đầu ra ở dạng JSON hợp lệ với một Prescription medication với những thông tin như được cung cấp như sau:"+json.dumps(self.default_json_format)},
                 {"role":"user","content":prompt}
             ]
         )
