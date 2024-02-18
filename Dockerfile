@@ -9,29 +9,37 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-
 WORKDIR /app/
 
-RUN apt-get update \
-    && apt-get -y install gcc \
-    && apt-get clean
+# Add the Deadsnakes PPA for newer Python versions
+RUN apt-get update && apt-get install -y software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
 
-RUN apt-get update && apt-get install -y libgl1-mesa-glx python3 python3-dev git curl
+# Now you can install Python 3.11
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3.11-venv \
+    python3.11-dev \
+    libgl1-mesa-glx \
+    gcc \
+    git \
+    curl \
+    build-essential \
+    cmake \
+    pkg-config \
+    libgl1-mesa-glx
+
+# Install pip for Python 3.11
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python3 get-pip.py
+RUN python3.11 get-pip.py
 
-RUN apt-get update -y && \
-    apt-get install build-essential cmake pkg-config -y
-RUN apt-get update
-
-RUN apt-get install python3-tk -y
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
-RUN update-alternatives  --set python /usr/bin/python3
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+RUN update-alternatives  --set python /usr/bin/python3.11
 
 RUN pip install --upgrade pip
 RUN pip install cmake
 
-RUN pip install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
 
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt \
@@ -41,7 +49,5 @@ COPY . /app/
 
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 
-RUN ls 
 RUN chmod +x ./run_service.sh
 CMD ["./run_service.sh"]
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0","--port","80"]

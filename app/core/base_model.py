@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import List, Optional
 from datetime import datetime
 
@@ -12,12 +12,9 @@ class MedicationBaseModel(BaseModel):
     frequency_morning: int = None
     frequency_afternoon: int = None
     frequency_evening: int = None
-    start_date: datetime = None
-    end_date: datetime = None
+    start_date: str = None
+    end_date: str = None
 
-
-class MedicationRecordsBaseModel(BaseModel):
-    medication_records: List[MedicationBaseModel]
 
 class MetaDataBaseModel(BaseModel):
     created_at: str = None
@@ -34,5 +31,5 @@ class MetaDataBaseModel(BaseModel):
     note: str = None
 class UserDataBaseModel(BaseModel):
     medication_records_id: str
-    medication_records: MedicationRecordsBaseModel
+    medication_records: List[MedicationBaseModel]
     meta_data: MetaDataBaseModel
