@@ -9,9 +9,9 @@ app = FastAPI()
 
 @app.post("/api/v1/predict-ocr/")
 async def predict_ocr(message: dict):
-    user_Id = message.get("User_Id")
-    prescription_Id = message.get("Prescription_Id")
-    image = message.get("Image")
+    user_Id = message.get("user_Id")
+    prescription_Id = message.get("prescription_Id")
+    image = message.get("imageBase64")
     
     error = ""
     STATUS = 200 
@@ -31,7 +31,7 @@ async def predict_ocr(message: dict):
     response = {"status": STATUS, 
                 "user_Id": user_Id, 
                 "prescription_Id": prescription_Id,
-                "data": data, 
+                "data": str(data), 
                 "imageBase64": img_bytes, 
                 "error": error}
     print(response)
@@ -41,9 +41,9 @@ async def predict_ocr(message: dict):
 
 @app.post("/api/v1/predict-info/")
 async def predict_info(message: dict):
-    user_Id = message.get("User_Id")
-    prescription_Id = message.get("Prescription_Id")
-    data = message.get("Data")
+    user_Id = message.get("user_Id")
+    prescription_Id = message.get("prescription_Id")
+    data = message.get("data")
     error = ""
     STATUS = 200
     try:
