@@ -20,6 +20,10 @@ https://drive.google.com/drive/folders/1CPn2kOxE1rXo7ZB13E23RdmhbI1zplpy?usp=sha
 
 Install dependencies:
 ```bash
+pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
+```
+
+```bash
 pip install -r requirements.txt
 ```
 
