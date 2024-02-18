@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
-from app.core.base_model import UserDataBaseModel, MedicationRecordsBaseModel, MedicationBaseModel, MetaDataBaseModel
+from app.core.base_model import UserDataBaseModel, MetaDataBaseModel
 import os, cv2, io
 from PIL import Image
 import uuid
@@ -37,10 +37,8 @@ def get_datetime_with_timezone():
 def create_base_model(medication_records: list = None, 
                       meta_data: MetaDataBaseModel = None, 
                       prescription_Id: str = None):
-    
-    medication_records = MedicationRecordsBaseModel(medication_records=medication_records.items)
-    
-    return UserDataBaseModel(medication_records_id=prescription_Id, medication_records=medication_records, meta_data=meta_data)
+
+    return UserDataBaseModel(medication_records_id=prescription_Id, medication_records=medication_records.items, meta_data=meta_data)
 
 def save_Image_from_bytes(encoded_image):
     # Decode the base64-encoded image

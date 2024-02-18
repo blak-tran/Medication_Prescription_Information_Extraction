@@ -20,6 +20,10 @@ https://drive.google.com/drive/folders/1CPn2kOxE1rXo7ZB13E23RdmhbI1zplpy?usp=sha
 
 Install dependencies:
 ```bash
+pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
+```
+
+```bash
 pip install -r requirements.txt
 ```
 
@@ -29,7 +33,7 @@ docker build . -t pillsy_ai_deployment:2.0 -f Dockerfile
 ```
 Docker Run:
 ```bash
-sudo docker run -p 8000:8000 --runtime nvidia -d --restart=unless-stopped pillsy_ai_deployment:2.0
+sudo docker run -p 8001:8000 --runtime nvidia -d --restart=unless-stopped pillsy_ai_deployment:2.0
 ```
 
 Run the FastAPI application:

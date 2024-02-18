@@ -47,8 +47,8 @@ async def predict_info(message: dict):
     error = ""
     STATUS = 200
     try:
-        data_ehance = llm_model.standardize_data(str(data))
-        json_data = llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
+        data_ehance = await llm_model.data_generator(str(data))
+        json_data = await llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
     except Exception as e:
         error = "Traceback: " + str(e)
         STATUS = 404
