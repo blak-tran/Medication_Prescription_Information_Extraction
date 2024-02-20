@@ -59,6 +59,6 @@ async def predict_info(message: dict):
         STATUS = 404
         print(f"An error occurred: {e}")
 
-    response = {"status": STATUS, "user_data": json_data, "error": error}
+    response = {"status": STATUS, "User_Data": json_data, "error": error}
     print(response)
     return response
