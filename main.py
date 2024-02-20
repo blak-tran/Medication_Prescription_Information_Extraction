@@ -9,13 +9,17 @@ app = FastAPI()
 
 @app.post("/api/v1/predict-ocr/")
 async def predict_ocr(message: dict):
-    user_Id = message.get("user_Id")
-    prescription_Id = message.get("prescription_Id")
-    image = message.get("imageBase64")
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    image = message.get("Image")
+    
     
     error = ""
     STATUS = 200 
     try:
+        data = None 
+        img_bytes = None
+        
         img = save_Image_from_bytes(image)
         result_path, data = app_scanner.tracking_data(img)
         
@@ -29,10 +33,10 @@ async def predict_ocr(message: dict):
         print(f"An error occurred: {e}")
 
     response = {"status": STATUS, 
-                "user_Id": user_Id, 
-                "prescription_Id": prescription_Id,
-                "data": str(data), 
-                "imageBase64": img_bytes, 
+                "User_Id": user_Id, 
+                "Prescription_Id": prescription_Id,
+                "Data": str(data), 
+                "Image": img_bytes, 
                 "error": error}
     print(response)
     
@@ -41,12 +45,13 @@ async def predict_ocr(message: dict):
 
 @app.post("/api/v1/predict-info/")
 async def predict_info(message: dict):
-    user_Id = message.get("user_Id")
-    prescription_Id = message.get("prescription_Id")
-    data = message.get("data")
+    user_Id = message.get("User_Id")
+    prescription_Id = message.get("Prescription_Id")
+    data = message.get("Data")
     error = ""
     STATUS = 200
     try:
+        json_data = None 
         data_ehance = await llm_model.data_generator(str(data))
         json_data = await llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
     except Exception as e:
