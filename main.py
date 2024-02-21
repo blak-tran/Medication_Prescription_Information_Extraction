@@ -54,15 +54,14 @@ async def predict_info(message: dict):
         
     json_data = None 
     data_ehance = await llm_model.data_generator(str(data))
-    while 1:
-        try:
-            json_data = await llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
-            break
-        except Exception as e:
-            error = "Traceback: " + str(e)
-            STATUS = 404
-            print(f"An error occurred: {e}")
-            continue
+    try:
+        json_data = await llm_model.Json_tracking(user_Id, prescription_Id, data_ehance)
+
+    except Exception as e:
+        error = "Traceback: " + str(e)
+        STATUS = 404
+        print(f"An error occurred: {e}")
+
 
     response = {"status": STATUS, "Data": json_data, "error": error}
     print(response)
