@@ -6,6 +6,7 @@ from app.core.utils import load_environments
 from gpt_json import GPTMessage, GPTMessageRole
 from gpt_json.gpt import GPTJSON, ListResponse
 from app.core.base_model import MedicationBaseModel, MetaDataBaseModel
+
 from langchain.vectorstores import Chroma
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_core.output_parsers import StrOutputParser
@@ -13,6 +14,10 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain, LLMChain, RetrievalQA
+import logging
+from json.decoder import JSONDecodeError
+
+logger = logging.getLogger(__name__)
 
 
 # Load environment variables from the .env file in the specified root directory
@@ -56,10 +61,10 @@ class CHATBOT:
                  prompt_template_standardize_data_: str):
         
         self.gpt_tracking_medication = GPTJSON[ListResponse[MedicationBaseModel]](
-            api_key=OPENAI_KEY, model="gpt-3.5-turbo-1106")
+            api_key=OPENAI_KEY, model="gpt-3.5-turbo")
         
         self.gpt_tracking_metaData = GPTJSON[MetaDataBaseModel](
-            api_key=OPENAI_KEY, model="gpt-3.5-turbo-1106")
+            api_key=OPENAI_KEY, model="gpt-3.5-turbo")
         
         # self.prompt_template_json_tracking_ = prompt_template_json_tracking_
         self.prompt_template_standardize_data_ = prompt_template_standardize_data_
@@ -70,18 +75,18 @@ class CHATBOT:
         prompt = data + " prescription_Id: " + prescription_Id + " user_id: " + user_id
         print("Json Tracking Prompt: ", prompt)
         
-        payload_medications = await self.gpt_tracking_medication.run(
-            messages=[
-                GPTMessage(
-                    role=GPTMessageRole.SYSTEM,
-                    content=SYSTEM_PROMPT,
-                ),
-                GPTMessage(
-                    role=GPTMessageRole.USER,
-                    content=prompt,
+        try:
+            payload_medications = await self.gpt_tracking_medication.run(
+                    messages=[
+                        GPTMessage(role=GPTMessageRole.SYSTEM, content=SYSTEM_PROMPT),
+                        GPTMessage(role=GPTMessageRole.USER, content=prompt),
+                    ]
                 )
-            ]
-        )
+
+        except JSONDecodeError as e:
+            logger.error(f"JSON decode error: {e}")
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
         
         print("Medication lists: ", payload_medications.response)
         

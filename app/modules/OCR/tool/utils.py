@@ -138,14 +138,14 @@ def visualize(
         if visualize_best:
             color = color_list[label_idx]
             img = draw_bbox(img, [box], color=color)
-            if i in best_score_idx:
-                plt_text = f'{text}: {label} | {score}'
-                plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
+            # if i in best_score_idx:
+            #     plt_text = f'{text}: {label} | {score}'
+            #     plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
         else:
             color = color_list[0]
             img = draw_bbox(img, [box], color=color)
-            plt_text = f'{text}'
-            plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
+            # plt_text = f'{text}'
+            # plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
 
 
     # Display the image
