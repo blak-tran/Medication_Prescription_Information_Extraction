@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from app.core.base_model import UserDataBaseModel, MetaDataBaseModel
 import os, cv2, io
 from PIL import Image
-import uuid
+from uuid import uuid4
 import base64
 
 
@@ -32,12 +32,40 @@ def get_datetime_with_timezone():
 
     return datetime_with_timezone
 
+def parse_date_with_flexible_formats(date_str, formats):
+    """
+    Attempts to parse a date string using a list of possible formats.
+
+    :param date_str: The date string to parse.
+    :param formats: A list of string formats to try.
+    :return: A datetime object if parsing succeeds, or None if all formats fail.
+    """
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    return None
+
+# Define the list of date formats you expect
+date_formats = ["%d-%m-%Y", "%d%m/%Y"]
 
 # Function to create an instance of BaseModel from form_json
 def create_base_model(medication_records: list = None, 
                       meta_data: MetaDataBaseModel = None, 
                       prescription_Id: str = None):
-
+    for idx, _ in enumerate(medication_records.items):
+        medication_records.items[idx].record_id = str(uuid4())
+        if medication_records.items[idx].start_date is not None:
+            medication_records.items[idx].start_date = parse_date_with_flexible_formats(medication_records.items[idx].start_date, date_formats)
+        if medication_records.items[idx].end_date is not None:
+            medication_records.items[idx].end_date = parse_date_with_flexible_formats(medication_records.items[idx].end_date, date_formats)
+    
+    if meta_data.created_at is not None:
+        meta_data.created_at = parse_date_with_flexible_formats(meta_data.created_at, date_formats)
+    if meta_data.modified_at is not None:
+        meta_data.modified_at = parse_date_with_flexible_formats(meta_data.modified_at, date_formats)
+    
     return UserDataBaseModel(medication_records_id=prescription_Id, medication_records=medication_records.items, meta_data=meta_data)
 
 def save_Image_from_bytes(encoded_image):
