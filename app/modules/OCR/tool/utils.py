@@ -91,68 +91,52 @@ def find_highest_score_each_class(labels, probs, class_mapping):
                 best_idx[label_idx] = i
     return best_idx
 
-def visualize(
-        img, 
-        boxes, 
-        texts, 
-        img_name, 
-        class_mapping,
-        labels = None, 
-        probs = None, 
-        visualize_best=False):
-
+def visualize(img, boxes, texts, img_name, class_mapping, labels=None, probs=None, visualize_best=False):
     """
-    Visualize an image with its bouding boxes
+    Visualize an image with its bounding boxes
     """
-    
+    # Ensure necessary conditions for visualize_best
     if visualize_best:
         assert labels is not None and probs is not None, "To visualize best, please provide labels and probs"
 
+    # Basic setup for the figure
     dpi = matplotlib.rcParams['figure.dpi']
-    # Determine the figures size in inches to fit your image
     height, width, depth = img.shape
     figsize = width / float(dpi), height / float(dpi)
-    
+
+    # Placeholder for best_score_idx if needed
+    best_score_idx = []
+
+    # Finding the highest score for each class if needed
     if visualize_best:
         best_score_idx = find_highest_score_each_class(labels, probs, class_mapping)
-    fig,ax = plt.subplots(figsize=figsize)
-    
-    
-    # Create a Rectangle patch
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    for i in range(len(boxes)):
-        
-        box = boxes[i]
-        text = texts[i]
 
-        if labels is not None:
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Convert image color space if needed
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    for i, box in enumerate(boxes):
+        # Extract bounding box coordinates
+        x_min, y_min, x_max, y_max = box.astype(int)
+
+        # Define the rectangle patch and add it to the axes
+        rect = matplotlib.patches.Rectangle((x_min, y_min), x_max - x_min, y_max - y_min, linewidth=1, edgecolor='r', facecolor='none')
+        ax.add_patch(rect)
+
+        # Handling labels and probabilities for visualization
+        if labels is not None and probs is not None and visualize_best:
             label = labels[i]
-            label_idx = class_mapping[label]    
-        if probs is not None:
             prob = probs[i]
-            score = np.round(float(prob), 3)
-        
-        (x1,y1),(x2,y2),(x3,y3),(x4,y4) = box
-        box = np.array([(x1,y1),(x2,y2),(x3,y3),(x4,y4)])
-
-        if visualize_best:
-            color = color_list[label_idx]
-            img = draw_bbox(img, [box], color=color)
-            # if i in best_score_idx:
-            #     plt_text = f'{text}: {label} | {score}'
-            #     plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
-        else:
-            color = color_list[0]
-            img = draw_bbox(img, [box], color=color)
-            # plt_text = f'{text}'
-            # plt.text(x1, y1-3, plt_text, color = [i/255 for i in color][::-1], fontsize=10, weight="bold")
-
+            score = np.round(prob, 3)
+            label_text = f'{texts[i]}: {class_mapping[label]} | {score}'
+            ax.text(x_min, y_min - 10, label_text, color='blue', fontsize=8)
+        elif texts:
+            # Just put the text if provided
+            ax.text(x_min, y_min - 10, texts[i], color='blue', fontsize=8)
 
     # Display the image
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    
     ax.imshow(img)
-
     plt.axis('off')
-    plt.savefig(img_name,bbox_inches='tight')
+    plt.savefig(img_name, bbox_inches='tight')
     plt.close()
