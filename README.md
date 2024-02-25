@@ -27,6 +27,20 @@ pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
 pip install -r requirements.txt
 ```
 
+## Install mmocr
+```bash
+pip install -U openmim
+mim install mmengine
+mim install mmcv
+mim install mmdet
+
+git clone https://github.com/open-mmlab/mmocr.git && cd mmocr
+pip install -v -e .
+
+cd ../
+
+```
+
 Docker build:
 ```bash
 docker build . -t pillsy_ai_deployment:2.0 -f Dockerfile

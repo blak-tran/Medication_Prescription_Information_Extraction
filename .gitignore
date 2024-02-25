@@ -3,4 +3,4 @@ app/temp/*
 venv*/
 __pycache__/
 .cache/
-app/db/*
+mmocr

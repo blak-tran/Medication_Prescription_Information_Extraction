@@ -40,7 +40,7 @@ if not openai.api_key:
 
 
 SYSTEM_PROMPT = """
-Analyze the Medication Prescription Information of the given text.
+Analyze the Medication Prescription Information of the given text. with vietnamese output.
 
 Respond with the following JSON schema:
 

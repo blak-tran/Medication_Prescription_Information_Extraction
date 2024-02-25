@@ -8,10 +8,14 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import matplotlib
 from app.modules.OCR.modules import Preprocess, Detection, OCR, Retrieval, Correction
+from app.modules.OCR.modules.detection.utils.util import order_points_clockwise
 from app.modules.OCR.tool.config import Config
 from app.modules.OCR.tool.utils import natural_keys, visualize, find_highest_score_each_class
 import time
+import shutil
 from app.core.utils import load_environments
+from mmocr.apis import MMOCRInferencer
+import mmocr
 
 load_environments()
 config = Config('app/modules/OCR/tool/config/configs.yaml')
@@ -50,9 +54,11 @@ class APP_SCANNER:
         self.retr_output = os.path.join(TEMP_ROOT_PATH, 'result.txt')
 
     def init_modules(self):
-        self.det_model = Detection(
-            config_path=self.det_config,
-            weight_path=self.det_weight)
+        # self.det_model = Detection(
+        #     config_path=self.det_config,
+        #     weight_path=self.det_weight)
+        
+        self.det_model = MMOCRInferencer(det='DBNet', rec='SAR', kie='SDMGR', device='cuda:0')
         self.ocr_model = OCR(
             config_path=self.ocr_config,
             weight_path=self.ocr_weight)
@@ -82,22 +88,61 @@ class APP_SCANNER:
 
     def tracking_data(self, img):
         # Document extraction
-        img1 = self.preproc(img)
+        # img1 = self.preproc(img)
 
         if self.debug:
+            det_results = self.det_model(img, show=False)
+            det_polygons = det_results["predictions"][0]['det_polygons']
+            boxes = []
+    
+            for polygon in det_polygons:
+                bbox = mmocr.utils.poly2bbox(polygon)
+                boxes.append(bbox)
+
+            if self.cache_folder is None:
+                assert self.cache_folder, "Please specify output_path"
+            else:
+                output_path_crop = os.path.join(self.cache_folder, 'crops')
+                if os.path.exists(output_path_crop):
+                    shutil.rmtree(output_path_crop)
+                    os.mkdir(output_path_crop)
+            
+            def draw_bbox(img_path, result, color=(255, 0, 0), thickness=2):
+                if isinstance(img_path, str):
+                    img = cv2.imread(img_path)
+                    # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                else:
+                    img = img_path.copy()
+                
+                for box in result:
+                    box = box.astype(int)
+                    # Define points as top-left, top-right, bottom-right, bottom-left
+                    tl, tr, br, bl = (box[0], box[1]), (box[2], box[1]), (box[2], box[3]), (box[0], box[3])
+                    
+                    # Draw lines between the points
+                    cv2.line(img, tl, tr, color, thickness)
+                    cv2.line(img, tr, br, color, thickness)
+                    cv2.line(img, br, bl, color, thickness)
+                    cv2.line(img, bl, tl, color, thickness)
+                    
+                return img
+            img1 = draw_bbox(img, boxes)
+            
+            self.crop_box(img, boxes, output_path_crop)
+
             saved_img = cv2.cvtColor(img1, cv2.COLOR_RGB2BGR)
             cv2.imwrite(self.preprocess_cache, saved_img)
 
-            boxes, img2 = self.det_model(
-                img1,
-                crop_region=True,
-                return_result=True,
-                output_path=self.cache_folder)
-            saved_img = cv2.cvtColor(img2, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(self.detection_cache, saved_img)
+            # boxes, img2 = self.det_model(
+            #     img,
+            #     crop_region=True,
+            #     return_result=True,
+            #     output_path=self.cache_folder)
+            # saved_img = cv2.cvtColor(img2, cv2.COLOR_RGB2BGR)
+            # cv2.imwrite(self.detection_cache, saved_img)
         else:
             boxes = self.det_model(
-                img1,
+                img,
                 crop_region=True,
                 return_result=False,
                 output_path=self.cache_folder)
@@ -122,6 +167,35 @@ class APP_SCANNER:
             visualize_best=self.do_retrieve)
         
         return self.final_output, texts
+    
+    def crop_box(self, img, boxes, out_folder, sort=True):
+        h, w, c = img.shape
+
+        # Ensure the output folder exists
+        if not os.path.exists(out_folder):
+            os.makedirs(out_folder)
+
+        for i, box in enumerate(boxes):
+            box_name = os.path.join(out_folder, f"{i}.png")
+
+            # Convert box coordinates to integers and ensure they are within image dimensions
+            x_min, y_min, x_max, y_max = box.astype(int)
+            x_min = max(0, x_min)
+            y_min = max(0, y_min)
+            x_max = min(w, x_max)
+            y_max = min(h, y_max)
+
+            # Crop the image based on the box coordinates
+            cropped_img = img[y_min:y_max, x_min:x_max]
+
+            # Save the cropped image
+            try:
+                cv2.imwrite(box_name, cropped_img)
+            except Exception as e:
+                print(f"Error saving {box_name}: {e}")
+
+        return boxes
+
     
     
 app_scanner = APP_SCANNER(config)
