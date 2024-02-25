@@ -3,3 +3,4 @@ app/temp/*
 venv*/
 __pycache__/
 .cache/
+mmocr
