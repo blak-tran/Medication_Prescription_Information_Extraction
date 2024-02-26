@@ -89,12 +89,14 @@ class APP_SCANNER:
     def tracking_data(self, img):
         # Document extraction
         # img1 = self.preproc(img)
+        start_time = time.time()
         print("Starting detect boxes: ")
         det_results = self.det_model(img, show=False)
         det_polygons = det_results["predictions"][0]['det_polygons']
         boxes = []
-
-        for polygon in det_polygons:
+       
+        det_polygons_sorted =  mmocr.utils.sort_points(det_polygons)
+        for polygon in det_polygons_sorted:
             bbox = mmocr.utils.poly2bbox(polygon)
             boxes.append(bbox)
 
@@ -149,8 +151,9 @@ class APP_SCANNER:
             class_mapping=self.class_mapping,
             labels=preds, probs=probs,
             visualize_best=self.do_retrieve)
-        
-        return self.final_output, " ".join(texts)
+        end_time = time.time()
+        print("Time inference: ", end_time - start_time)
+        return self.final_output, texts
     def draw_bbox(self, img_path, result, color=(255, 0, 0), thickness=2):
         if isinstance(img_path, str):
             img = cv2.imread(img_path)

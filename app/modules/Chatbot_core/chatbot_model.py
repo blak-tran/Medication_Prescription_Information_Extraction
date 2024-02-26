@@ -28,9 +28,10 @@ if not openai.api_key:
 
 
 SYSTEM_PROMPT = """
-Analyze the Medication Prescription Information of the given text. with vietnamese output.
+Phân tích Thông tin Đơn thuốc trong văn bản đã cho. với đầu ra tiếng Việt. 
+Dữ liệu đã được sắp xếp từng dòng và từ trái sang phải
 
-Respond with the following JSON schema:
+Trả lời bằng lược đồ JSON sau:
 
 {json_schema}
 """
@@ -96,11 +97,11 @@ class CHATBOT:
         
         # Adjusting the method call for a chat model
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-1106",  # Specify the engine you want to use
+            model="gpt-3.5-turbo",  # Specify the engine you want to use
             messages=[
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.2  # The creativity temperature, higher values mean more creative responses
+            temperature=1 # The creativity temperature, higher values mean more creative responses
         )
 
         # Assuming the response structure aligns with ChatCompletion's output
