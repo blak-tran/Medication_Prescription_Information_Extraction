@@ -89,6 +89,7 @@ class APP_SCANNER:
     def tracking_data(self, img):
         # Document extraction
         # img1 = self.preproc(img)
+        print("Starting detect boxes: ")
         det_results = self.det_model(img, show=False)
         det_polygons = det_results["predictions"][0]['det_polygons']
         boxes = []
@@ -107,7 +108,7 @@ class APP_SCANNER:
                 shutil.rmtree(output_path_crop)
                 os.mkdir(output_path_crop)
         
-        
+        print("Drawing and croppng image...")
         img1 = self.draw_bbox(img, boxes)
         
         self.crop_box(img, boxes, output_path_crop)
@@ -133,6 +134,7 @@ class APP_SCANNER:
         img_paths.sort(key=natural_keys)
         img_paths = [os.path.join(self.crop_cache, i) for i in img_paths]
 
+        print("OCR... ")
         texts = self.ocr_model.predict_folder(img_paths, return_probs=False)
         texts = self.correction(texts, return_score=False)
 
