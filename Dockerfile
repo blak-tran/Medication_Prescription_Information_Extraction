@@ -45,6 +45,17 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt \
     && rm -rf /root/.cache/pip
 
+RUN pip install openmim==0.3.9 && mim install mmengine==0.10.3 && mim install mmcv==2.0.1 && mim install mmdet==3.0.0rc5
+RUN git clone https://github.com/open-mmlab/mmocr.git
+
+RUN ls && cd mmocr
+
+
+RUN ls && cd mmocr && pip install -v -e . \
+    && cd ../
+
+RUN ls
+
 COPY . /app/
 
 ENV NVIDIA_DRIVER_CAPABILITIES=all
