@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.6.1-devel-ubuntu20.04
 LABEL maintainer "pillsy@gmail.com"
 
 RUN rm -f /etc/apt/sources.list.d/cuda.list
